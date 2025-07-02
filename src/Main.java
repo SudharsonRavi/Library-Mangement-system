@@ -309,6 +309,34 @@ public class Main {
         return null;
     }
 //-----------------------------DB-connections-----------------------------------------
+    public static void addMemberTodb(String username){
+        String sql = "insert into members (username) values (?)";
+        try(Connection conn = DBconnection.getConnection();
+            PreparedStatement pre = conn.prepareStatement(sql);){
+            pre.setString(1,username);
+            pre.executeUpdate();
+            System.out.println("Member added succesfully");
+        }
+        catch(Exception e){
+            System.out.println("Error adding Memmber"+e.getMessage());
+        }
+    }
 
+    public static void addBookTodb(String title,String author,String genere,boolean isAvailable){
+        String sql = "insert into books values (?,?,?)";
+
+        try (Connection conn = DBconnection.getConnection();
+             PreparedStatement pre = conn.prepareStatement(sql);){
+            pre.setString(1,title);
+            pre.setString(2,author);
+            pre.setString(3,genere);
+            pre.setBoolean(4,isAvailable);
+            pre.executeUpdate();
+            System.out.println("Added succesfully");
+        }
+        catch(Exception e){
+            System.out.println("Connenction Failed"+e.getMessage());
+        }
+    }
 
 }
