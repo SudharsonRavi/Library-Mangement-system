@@ -1,6 +1,7 @@
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.*;
 
 class Book{
@@ -211,16 +212,23 @@ public class Main {
             }
         }
     }
+    public static void displayBooks(){
+        String sql ="select * from books where isAvailable = true";
+        try(Connection con = DBconnection.getConnection();
+            PreparedStatement pre = con.prepareStatement(sql);
+            ResultSet res = pre.executeQuery()){
 
-    private static void displayBooks() {
-        if(books.isEmpty()){
-            System.out.println("Books is empty");
-        }
-        System.out.println("List of Books \n");
-        for(Book book : books){
-            if(book.isAvailable){
-                System.out.println("Id: "+book.id+" Title: "+book.title+" Authour: "+book.author +" Genere : "+book.genre+" Books Available : "+book.isAvailable);
+            while(res.next()){
+                System.out.println("Id: " + res.getInt("id")
+                                   +" Title: " + res.getString("title")
+                                   + " Author: "+ res.getString("author")
+                                   + " Genere: "+res.getString("genere")
+                                   );
             }
+
+        }
+        catch (Exception e){
+            System.out.println("Error Fecthing Books"+e.getMessage());
         }
     }
 
@@ -338,5 +346,6 @@ public class Main {
             System.out.println("Connenction Failed"+e.getMessage());
         }
     }
+
 
 }
